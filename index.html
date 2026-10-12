@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>우리들의 학생 웹툰 갤러리</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdfa',
+              100: '#ccfbf1',
+              500: '#14b8a6',
+              600: '#0d9488',
+              700: '#0f766e',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Pretendard Font -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+  <style>
+    body {
+      font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    }
+    /* Hide scrollbars for clean look */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    /* Seamless webtoon cut vertical connection */
+    .webtoon-seamless-img {
+      display: block;
+      width: 100%;
+      height: auto;
+      margin: 0;
+      padding: 0;
+      border: none;
+      /* vertical-align: bottom; */
+    }
+  </style>
+
+  <!-- 선생님이 관리하시는 외부 데이터 파일 (같은 폴더에 위치) -->
+  <script src="webtoondata.js"></script>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col selection:bg-teal-500 selection:text-white">
+
+  <!-- Top Navigation Bar -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 sm:px-8 py-3.5 flex items-center justify-between shadow-xs">
+    <div class="flex items-center space-x-3 cursor-pointer select-none" onclick="goToHome()">
+      <div class="w-10 h-10 rounded-2xl bg-teal-500 flex items-center justify-center text-white shadow-md shadow-teal-500/20">
+        <i data-lucide="sparkles" class="w-5 h-5"></i>
+      </div>
+      <div>
+        <h1 class="text-base sm:text-lg font-extrabold tracking-tight text-slate-900 flex items-center gap-1.5">
+          스쿨툰 <span class="text-teal-600">아틀리에</span>
+          <span class="text-[10px] px-2 py-0.5 rounded-full bg-teal-50 text-teal-700 font-bold border border-teal-200">
+            학생 갤러리
+          </span>
+        </h1>
+        <p class="text-[11px] text-slate-400">우리 학교 학생 창작 웹툰 전시관</p>
+      </div>
+    </div>
+
+    <!-- Header Actions -->
+    <div class="flex items-center space-x-2">
+      <button onclick="goToHome()" class="px-3 py-1.5 text-xs font-bold text-slate-600 hover:text-teal-600 hover:bg-slate-100 rounded-xl transition flex items-center gap-1.5">
+        <i data-lucide="home" class="w-4 h-4"></i>
+        <span class="hidden sm:inline">홈으로</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content Layout -->
+  <main class="flex-1 w-full max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-6">
+
+    <!-- ========================================================= -->
+    <!-- VIEW 1: INDEX GALLERY (Cards List) -->
+    <!-- ========================================================= -->
+    <section id="view-gallery" class="space-y-5">
+      
+      <!-- Filter Bar & Search Input -->
+      <div class="flex flex-col sm:flex-row gap-3 justify-between items-stretch sm:items-center bg-white p-3 sm:p-4 rounded-2xl border border-slate-200 shadow-sm">
+        
+        <!-- Category / Genre Tags -->
+        <div class="flex items-center space-x-1.5 overflow-x-auto pb-1 sm:pb-0 no-scrollbar" id="genre-filters">
+          <button onclick="filterByGenre('all')" class="genre-btn active px-3.5 py-1.5 rounded-xl text-xs font-bold bg-teal-600 text-white shadow-xs transition whitespace-nowrap">전체</button>
+          <button onclick="filterByGenre('학원물')" class="genre-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-600 transition whitespace-nowrap">학원물</button>
+          <button onclick="filterByGenre('일상/개그')" class="genre-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-600 transition whitespace-nowrap">일상/개그</button>
+          <button onclick="filterByGenre('판타지')" class="genre-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-600 transition whitespace-nowrap">판타지</button>
+          <button onclick="filterByGenre('SF/스릴러')" class="genre-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-600 transition whitespace-nowrap">SF/스릴러</button>
+          <button onclick="filterByGenre('자유창작')" class="genre-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-600 transition whitespace-nowrap">자유창작</button>
+          <button onclick="filterByGenre('전래동화')" class="genre-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-600 transition whitespace-nowrap">전래동화</button>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="relative w-full sm:w-64">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+          <input 
+            type="text" 
+            id="searchInput"
+            oninput="handleSearch(this.value)"
+            placeholder="작품 제목 또는 학생 작가 검색..."
+            class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3.5 py-2 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-teal-500 focus:bg-white transition"
+          >
+        </div>
+      </div>
+
+      <!-- Gallery Grid Header -->
+      <div class="flex items-center justify-between px-1">
+        <h2 class="text-sm sm:text-base font-bold text-slate-800 flex items-center gap-2">
+          <span>등록된 학생 작품</span>
+          <span id="toonCount" class="text-xs bg-teal-100 text-teal-800 px-2 py-0.5 rounded-full font-bold">0</span>
+        </h2>
+        <span class="text-xs text-slate-400">카드를 누르면 웹툰이 열립니다</span>
+      </div>
+
+      <!-- Webtoon Grid -->
+      <div id="webtoonGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-5">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- VIEW 2: WEBTOON VIEWER (Pure Image Focus) -->
+    <!-- ========================================================= -->
+    <section id="view-reader" class="hidden flex-col items-center min-h-[85vh]">
+      
+      <!-- Top Sticky Reader Control Bar -->
+      <div class="sticky top-14 z-30 w-full max-w-3xl bg-white/95 backdrop-blur-md border border-slate-200 rounded-2xl p-2.5 sm:p-3 shadow-md mb-4 flex items-center justify-between gap-2">
+        
+        <!-- Back Button & Title Info -->
+        <div class="flex items-center space-x-2.5 min-w-0">
+          <button onclick="goToHome()" class="p-2 bg-slate-100 hover:bg-teal-50 hover:text-teal-700 text-slate-700 rounded-xl transition flex items-center gap-1 text-xs font-bold shrink-0">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+            <span class="hidden sm:inline">목록</span>
+          </button>
+          <div class="min-w-0">
+            <h2 id="readerTitle" class="text-xs sm:text-sm font-bold text-slate-900 truncate">작품 제목</h2>
+            <p id="readerAuthor" class="text-[11px] text-teal-600 font-medium truncate">학생 작가</p>
+          </div>
+        </div>
+
+        <!-- Mode Toggle Segment: Scroll vs Slide -->
+        <div class="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 shrink-0">
+          <button 
+            id="btnModeScroll" 
+            onclick="setViewerMode('scroll')" 
+            class="flex items-center space-x-1 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-bold transition text-white bg-teal-600 shadow-xs">
+            <i data-lucide="chevrons-down" class="w-3.5 h-3.5"></i>
+            <span>세로 스크롤</span>
+          </button>
+          <button 
+            id="btnModeSlide" 
+            onclick="setViewerMode('slide')" 
+            class="flex items-center space-x-1 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition text-slate-600 hover:text-slate-900">
+            <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5"></i>
+            <span>가로 슬라이드</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 1. VERTICAL SCROLL MODE (Seamless, No Borders, No Text) -->
+      <div id="container-scroll-mode" class="w-full flex flex-col items-center">
+        <!-- Scroll Progress Bar -->
+        <div class="fixed top-0 left-0 w-full h-1 bg-transparent z-50 pointer-events-none">
+          <div id="scrollProgressBar" class="h-full bg-teal-500 w-0 transition-[width] duration-75"></div>
+        </div>
+
+        <!-- Seamless Images Stack (No padding, no border, pure continuous images) -->
+        <div id="scrollCutsWrapper" class="w-full max-w-2xl bg-white shadow-xs leading-none">
+          <!-- Continuous <img> tags injected here -->
+        </div>
+
+        <!-- Simple End Marker -->
+        <div class="mt-8 mb-12 text-center text-slate-400 text-xs flex flex-col items-center gap-1">
+          <div class="w-8 h-8 rounded-full bg-slate-100 text-teal-600 flex items-center justify-center font-bold">
+            <i data-lucide="check" class="w-4 h-4"></i>
+          </div>
+          <span class="font-bold text-slate-600">작품의 마지막 컷입니다.</span>
+          <button onclick="goToHome()" class="mt-2 px-4 py-2 bg-slate-800 text-white rounded-xl text-xs font-bold hover:bg-slate-700 transition">
+            작품 목록으로 돌아가기
+          </button>
+        </div>
+      </div>
+
+      <!-- 2. HORIZONTAL SLIDE MODE (With bottom navigation buttons & swipe) -->
+      <div id="container-slide-mode" class="hidden w-full max-w-2xl flex-col items-center select-none">
+        
+        <!-- Main Slide Display Area (Touch swipeable) -->
+        <div id="slideTouchArea" class="w-full bg-black/5 rounded-2xl overflow-hidden flex items-center justify-center min-h-[360px] sm:min-h-[500px]">
+          <img 
+            id="currentSlideImg" 
+            src="" 
+            alt="웹툰 컷"
+            class="w-full max-h-[75vh] object-contain transition-opacity duration-150"
+          />
+        </div>
+
+        <!-- Page Indicator Badge -->
+        <div class="mt-3 text-xs font-bold text-slate-500 bg-white border border-slate-200 px-3.5 py-1 rounded-full shadow-xs">
+          <span id="slideCurrentNum" class="text-teal-600 font-extrabold text-sm">1</span>
+          <span class="mx-0.5 text-slate-300">/</span>
+          <span id="slideTotalNum">1</span>
+        </div>
+
+        <!-- Bottom Navigation Controls (Optimized for Mobile Tapping) -->
+        <div class="w-full max-w-md mt-4 grid grid-cols-2 gap-3 px-2">
+          <button 
+            type="button" 
+            onclick="prevSlide()" 
+            id="btnPrevSlide"
+            class="w-full py-3 px-4 rounded-xl font-bold text-xs sm:text-sm bg-white hover:bg-slate-50 active:bg-slate-100 text-slate-800 border border-slate-200 shadow-sm flex items-center justify-center gap-2 transition active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed">
+            <i data-lucide="chevron-left" class="w-5 h-5 text-teal-600"></i>
+            <span>이전 컷</span>
+          </button>
+
+          <button 
+            type="button" 
+            onclick="nextSlide()" 
+            id="btnNextSlide"
+            class="w-full py-3 px-4 rounded-xl font-bold text-xs sm:text-sm bg-teal-600 hover:bg-teal-700 active:bg-teal-800 text-white shadow-sm flex items-center justify-center gap-2 transition active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed">
+            <span>다음 컷</span>
+            <i data-lucide="chevron-right" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <p class="text-[11px] text-slate-400 mt-3 text-center">
+          화면을 좌우로 스와이프하거나 키보드 방향키(←, →)로도 넘길 수 있습니다.
+        </p>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script>
+    /* =========================================================
+       1. Fallback Mock Data Generator (Used only if webtoondata.js is absent)
+       ========================================================= */
+    function makeSampleCutSvg(title, cutNum, colorA, colorB) {
+      const svg = `
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 960" width="100%" height="auto">
+        <defs>
+          <linearGradient id="grad_${cutNum}" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="${colorA}"/>
+            <stop offset="100%" stop-color="${colorB}"/>
+          </linearGradient>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#grad_${cutNum})"/>
+        <rect x="24" y="24" width="672" height="912" rx="16" fill="#ffffff" opacity="0.95"/>
+        <circle cx="360" cy="420" r="100" fill="${colorA}" opacity="0.25"/>
+        <text x="360" y="440" font-size="80" text-anchor="middle" font-weight="bold" fill="${colorA}">#${cutNum}</text>
+        <text x="360" y="600" font-size="28" text-anchor="middle" font-weight="bold" fill="#1e293b">${title}</text>
+        <text x="360" y="640" font-size="18" text-anchor="middle" fill="#64748b">학생 창작 웹툰 본문 예시 컷 ${cutNum}</text>
+      </svg>
+      `;
+      return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+    }
+
+    // const FALLBACK_DATA = [
+    //   {
+    //     id: "toon-1",
+    //     title: "방과 후 마법동아리",
+    //     author: "2학년 이서윤",
+    //     genre: "판타지",
+    //     coverUrl: makeSampleCutSvg("방과 후 마법동아리", "표지", "#14b8a6", "#0f766e"),
+    //     cuts: [
+    //       makeSampleCutSvg("방과 후 마법동아리", 1, "#2dd4bf", "#14b8a6"),
+    //       makeSampleCutSvg("방과 후 마법동아리", 2, "#38bdf8", "#0284c7"),
+    //       makeSampleCutSvg("방과 후 마법동아리", 3, "#a855f7", "#7e22ce"),
+    //       makeSampleCutSvg("방과 후 마법동아리", 4, "#f43f5e", "#be123c")
+    //     ]
+    //   },
+    //   {
+    //     id: "toon-2",
+    //     title: "급식실 탈출 대작전",
+    //     author: "3학년 김민재",
+    //     genre: "일상/개그",
+    //     coverUrl: makeSampleCutSvg("급식실 탈출 대작전", "표지", "#f59e0b", "#d97706"),
+    //     cuts: [
+    //       makeSampleCutSvg("급식실 탈출 대작전", 1, "#fbbf24", "#f59e0b"),
+    //       makeSampleCutSvg("급식실 탈출 대작전", 2, "#fb923c", "#ea580c"),
+    //       makeSampleCutSvg("급식실 탈출 대작전", 3, "#34d399", "#059669")
+    //     ]
+    //   },
+    //   {
+    //     id: "toon-3",
+    //     title: "우리들의 밴드부 청춘록",
+    //     author: "2학년 최예원",
+    //     genre: "학원물",
+    //     coverUrl: makeSampleCutSvg("우리들의 밴드부 청춘록", "표지", "#ec4899", "#db2777"),
+    //     cuts: [
+    //       makeSampleCutSvg("우리들의 밴드부 청춘록", 1, "#f472b6", "#db2777"),
+    //       makeSampleCutSvg("우리들의 밴드부 청춘록", 2, "#60a5fa", "#2563eb"),
+    //       makeSampleCutSvg("우리들의 밴드부 청춘록", 3, "#a78bfa", "#7c3aed")
+    //     ]
+    //   }
+    // ];
+
+    /* =========================================================
+       2. Application State & Helper to Parse Comma Separated Cuts
+       ========================================================= */
+    let rawWebtoons = [];
+    let currentFilterGenre = 'all';
+    let searchQuery = '';
+    let currentWebtoon = null;
+    let currentViewerMode = 'scroll'; // 'scroll' or 'slide'
+    let currentSlideIndex = 0;
+
+    // Helper: Normalize cuts (Accepts string with commas or Array)
+    function normalizeCuts(cutsData) {
+      if (!cutsData) return [];
+      if (Array.isArray(cutsData)) {
+        return cutsData.map(c => typeof c === 'string' ? c.trim() : c).filter(Boolean);
+      }
+      if (typeof cutsData === 'string') {
+        return cutsData
+          .split(',')
+          .map(item => item.trim())
+          .filter(item => item.length > 0);
+      }
+      return [];
+    }
+
+    // Initialize Data from external webtoondata.js
+    function initWebtoonData() {
+      if (window.WEBTOON_DATA && Array.isArray(window.WEBTOON_DATA) && window.WEBTOON_DATA.length > 0) {
+        rawWebtoons = window.WEBTOON_DATA.map((item, index) => ({
+          id: item.id || `toon-${index + 1}`,
+          title: item.title || '무제',
+          author: item.author || '학생 작가',
+          genre: item.genre || '자유창작',
+          coverUrl: item.coverUrl || '',
+          cuts: normalizeCuts(item.cuts)
+        }));
+      } else {
+        // Fallback for demonstration
+        console.info('webtoondata.js가 없거나 비어 있어 샘플 데이터를 표시합니다.');
+        rawWebtoons = FALLBACK_DATA;
+      }
+      renderGallery();
+    }
+
+    /* =========================================================
+       3. Gallery Rendering
+       ========================================================= */
+    function renderGallery() {
+      const grid = document.getElementById('webtoonGrid');
+      grid.innerHTML = '';
+
+      const filtered = rawWebtoons.filter(item => {
+        const matchGenre = (currentFilterGenre === 'all') || (item.genre === currentFilterGenre);
+        const matchSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                            item.author.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchGenre && matchSearch;
+      });
+
+      document.getElementById('toonCount').textContent = filtered.length;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full py-16 text-center text-slate-400 bg-white rounded-2xl border border-slate-200">
+            <i data-lucide="search-x" class="w-10 h-10 mx-auto mb-2 text-slate-300"></i>
+            <p class="text-xs font-bold text-slate-600">등록된 작품이 없습니다.</p>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      filtered.forEach(item => {
+        const card = document.createElement('div');
+        card.className = "group bg-white border border-slate-200 hover:border-teal-400 rounded-2xl overflow-hidden shadow-xs hover:shadow-md transition-all duration-200 flex flex-col cursor-pointer";
+        card.onclick = () => openWebtoon(item.id);
+
+        const coverSrc = item.coverUrl || (item.cuts.length > 0 ? item.cuts[0] : 'https://placehold.co/400x533/f0fdfa/0d9488?text=Cover');
+
+        card.innerHTML = `
+          <div class="relative w-full aspect-[3/4] overflow-hidden bg-slate-100">
+            <img 
+              src="${coverSrc}" 
+              alt="${item.title}" 
+              class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              onerror="this.src='https://placehold.co/400x533/f1f5f9/64748b?text=${encodeURIComponent(item.title)}'"
+              loading="lazy"
+            />
+            <div class="absolute top-2 left-2">
+              <span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-white/95 text-teal-800 shadow-xs border border-white/80">
+                ${item.genre}
+              </span>
+            </div>
+            <div class="absolute top-2 right-2">
+              <span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-slate-900/75 text-white shadow-xs">
+                ${item.cuts.length}컷
+              </span>
+            </div>
+          </div>
+          <div class="p-3 flex-1 flex flex-col justify-between">
+            <div>
+              <h3 class="font-bold text-slate-900 text-xs sm:text-sm group-hover:text-teal-600 transition truncate">${item.title}</h3>
+              <p class="text-[11px] text-teal-600 font-semibold mt-0.5 truncate">${item.author}</p>
+            </div>
+            <div class="mt-2 pt-2 border-t border-slate-100 flex items-center justify-end text-[11px] text-teal-600 font-bold">
+              <span>감상하기 →</span>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      lucide.createIcons();
+    }
+
+    /* =========================================================
+       4. Viewer Logic (Seamless Vertical vs Horizontal Slide)
+       ========================================================= */
+    function openWebtoon(id) {
+      const found = rawWebtoons.find(w => w.id === id);
+      if (!found) return;
+
+      currentWebtoon = found;
+      currentSlideIndex = 0;
+
+      // Switch View
+      document.getElementById('view-gallery').classList.add('hidden');
+      document.getElementById('view-reader').classList.remove('hidden');
+      document.getElementById('view-reader').classList.add('flex');
+
+      // Top info
+      document.getElementById('readerTitle').textContent = currentWebtoon.title;
+      document.getElementById('readerAuthor').textContent = `${currentWebtoon.author} · ${currentWebtoon.genre} (${currentWebtoon.cuts.length}컷)`;
+
+      setViewerMode(currentViewerMode);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function goToHome() {
+      document.getElementById('view-reader').classList.add('hidden');
+      document.getElementById('view-reader').classList.remove('flex');
+      document.getElementById('view-gallery').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function setViewerMode(mode) {
+      currentViewerMode = mode;
+      const btnScroll = document.getElementById('btnModeScroll');
+      const btnSlide = document.getElementById('btnModeSlide');
+      const boxScroll = document.getElementById('container-scroll-mode');
+      const boxSlide = document.getElementById('container-slide-mode');
+
+      if (mode === 'scroll') {
+        btnScroll.className = "flex items-center space-x-1 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-bold transition text-white bg-teal-600 shadow-xs";
+        btnSlide.className = "flex items-center space-x-1 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition text-slate-600 hover:text-slate-900";
+
+        boxScroll.classList.remove('hidden');
+        boxSlide.classList.add('hidden');
+        boxSlide.classList.remove('flex');
+
+        renderScrollCuts();
+      } else {
+        btnSlide.className = "flex items-center space-x-1 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-bold transition text-white bg-teal-600 shadow-xs";
+        btnScroll.className = "flex items-center space-x-1 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition text-slate-600 hover:text-slate-900";
+
+        boxScroll.classList.add('hidden');
+        boxSlide.classList.remove('hidden');
+        boxSlide.classList.add('flex');
+
+        renderSlideCurrent();
+      }
+      lucide.createIcons();
+    }
+
+    // Vertical Scroll: Pure images, perfectly seamless
+    function renderScrollCuts() {
+      if (!currentWebtoon) return;
+      const wrapper = document.getElementById('scrollCutsWrapper');
+      wrapper.innerHTML = '';
+
+      currentWebtoon.cuts.forEach((cutSrc, idx) => {
+        const img = document.createElement('img');
+        img.src = cutSrc;
+        img.alt = `${currentWebtoon.title} 컷 ${idx + 1}`;
+        img.className = "webtoon-seamless-img";
+        img.loading = "lazy";
+        img.onerror = function() {
+          this.src = `https://placehold.co/720x960/f8fafc/94a3b8?text=${encodeURIComponent((idx + 1) + '컷 이미지를 찾을 수 없습니다')}`;
+        };
+        wrapper.appendChild(img);
+      });
+    }
+
+    // Horizontal Slide: Single image with bottom buttons
+    function renderSlideCurrent() {
+      if (!currentWebtoon || currentWebtoon.cuts.length === 0) return;
+
+      const imgEl = document.getElementById('currentSlideImg');
+      const curNumEl = document.getElementById('slideCurrentNum');
+      const totalNumEl = document.getElementById('slideTotalNum');
+      const btnPrev = document.getElementById('btnPrevSlide');
+      const btnNext = document.getElementById('btnNextSlide');
+
+      curNumEl.textContent = currentSlideIndex + 1;
+      totalNumEl.textContent = currentWebtoon.cuts.length;
+
+      imgEl.src = currentWebtoon.cuts[currentSlideIndex];
+      imgEl.onerror = function() {
+        this.src = `https://placehold.co/720x960/f8fafc/94a3b8?text=${encodeURIComponent((currentSlideIndex + 1) + '컷 이미지를 찾을 수 없습니다')}`;
+      };
+
+      // Button state
+      btnPrev.disabled = (currentSlideIndex === 0);
+      btnNext.disabled = (currentSlideIndex >= currentWebtoon.cuts.length - 1);
+    }
+
+    function nextSlide() {
+      if (!currentWebtoon) return;
+      if (currentSlideIndex < currentWebtoon.cuts.length - 1) {
+        currentSlideIndex++;
+        renderSlideCurrent();
+      }
+    }
+
+    function prevSlide() {
+      if (!currentWebtoon) return;
+      if (currentSlideIndex > 0) {
+        currentSlideIndex--;
+        renderSlideCurrent();
+      }
+    }
+
+    /* =========================================================
+       5. Filters, Search & Touch / Keyboard Gestures
+       ========================================================= */
+    function filterByGenre(genre) {
+      currentFilterGenre = genre;
+      const buttons = document.querySelectorAll('#genre-filters .genre-btn');
+      buttons.forEach(btn => {
+        btn.classList.remove('bg-teal-600', 'text-white', 'shadow-xs');
+        btn.classList.add('bg-slate-100', 'text-slate-600');
+      });
+      event.target.classList.remove('bg-slate-100', 'text-slate-600');
+      event.target.classList.add('bg-teal-600', 'text-white', 'shadow-xs');
+      renderGallery();
+    }
+
+    function handleSearch(query) {
+      searchQuery = query;
+      renderGallery();
+    }
+
+    // Keyboard Arrow Controls
+    window.addEventListener('keydown', (e) => {
+      const readerView = document.getElementById('view-reader');
+      if (readerView.classList.contains('hidden')) return;
+
+      if (currentViewerMode === 'slide') {
+        if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+          nextSlide();
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+          prevSlide();
+        }
+      }
+    });
+
+    // Touch Swipe on Slide Area
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const slideTouchBox = document.getElementById('slideTouchArea');
+    if (slideTouchBox) {
+      slideTouchBox.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      }, { passive: true });
+
+      slideTouchBox.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        const diff = touchEndX - touchStartX;
+        if (Math.abs(diff) > 40) {
+          if (diff < 0) nextSlide();
+          else prevSlide();
+        }
+      }, { passive: true });
+    }
+
+    // Scroll Progress Indicator
+    window.addEventListener('scroll', () => {
+      const readerView = document.getElementById('view-reader');
+      if (readerView.classList.contains('hidden') || currentViewerMode !== 'scroll') return;
+
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+      
+      const bar = document.getElementById('scrollProgressBar');
+      if (bar) bar.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+    });
+
+    window.onload = function() {
+      initWebtoonData();
+      lucide.createIcons();
+    };
+  </script>
+</body>
+</html>
