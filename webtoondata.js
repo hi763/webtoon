@@ -33,7 +33,7 @@ window.WEBTOON_DATA = [
     id: "toon_02",
     title: "마법사의 삶을 살고 있습니다",
     author: "6학년 김○온",
-    genre: "학원물, SF/스릴러",
+    genre: "학원물",
     coverUrl: "images/toon_02/cover.png",
     cuts: "images/toon_02/01.png, images/toon_02/02.png"
   }
