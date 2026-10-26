@@ -17,6 +17,7 @@
  * 
  * ※ cuts 항목에는 각 작품 폴더 안의 파일명들을 쉼표(,)로 연결해서 적어주시면 됩니다.
  * ※ coverUrl을 비워둘 경우 cuts의 첫 번째 이미지가 표지로 자동 지정됩니다.
+ * 장르: 학원물, 일상/개그, 판타지, SF/스릴러, 자유창작, 전래동화
  */
 
 window.WEBTOON_DATA = [
@@ -27,5 +28,13 @@ window.WEBTOON_DATA = [
     genre: "전래동화",
     coverUrl: "images/toon_01/cover.png",
     cuts: "images/toon_01/01.png, images/toon_01/02.png, images/toon_01/03.png, images/toon_01/04.png,images/toon_01/05.png, images/toon_01/06.png, images/toon_01/07.png, images/toon_01/08.png, images/toon_01/09.png, images/toon_01/10.png"
+  },
+  {
+    id: "toon_02",
+    title: "마법사의 삶을 살고 있습니다",
+    author: "6학년 김○온",
+    genre: "학원물, SF/스릴러",
+    coverUrl: "images/toon_02/cover.png",
+    cuts: "images/toon_02/01.png, images/toon_02/02.png"
   }
  ];
