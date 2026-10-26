@@ -32,9 +32,41 @@ window.WEBTOON_DATA = [
   {
     id: "toon_02",
     title: "마법사의 삶을 살고 있습니다",
-    author: "6학년 김○온",
+    author: "5학년 김○온",
     genre: "학원물",
     coverUrl: "images/toon_02/cover.png",
     cuts: "images/toon_02/01.png, images/toon_02/02.png"
+  },
+  {
+    id: "toon_03",
+    title: "숲속에서 일어난 일",
+    author: "5학년 변○린",
+    genre: "판타지",
+    coverUrl: "images/toon_03/cover.png",
+    cuts: "images/toon_03/01.png, images/toon_03/02.png"
+  },
+  {
+    id: "toon_05",
+    title: "갑자기 방에 갇혀버렷습니다?",
+    author: "5학년 정○서",
+    genre: "일상/개그",
+    coverUrl: "images/toon_05/cover.png",
+    cuts: "images/toon_05/01.png, images/toon_05/02.png, images/toon_05/03.png"
+  },
+  {
+    id: "toon_07",
+    title: "노른자 프라이",
+    author: "1학년 이○호",
+    genre: "판타지",
+    coverUrl: "images/toon_07/cover.png",
+    cuts: "images/toon_07/01.png, images/toon_07/02.png, images/toon_07/03.png, images/toon_07/04.png"
+  },
+  {
+    id: "toon_08",
+    title: "18세 수아의 위험천만 생존기",
+    author: "2학년 이○연",
+    genre: "판타지",
+    coverUrl: "images/toon_08/cover.png",
+    cuts: "images/toon_08/01.png, images/toon_08/02.png, images/toon_08/03.png, images/toon_08/04.png, images/toon_08/05.png"
   }
  ];
