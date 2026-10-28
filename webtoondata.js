@@ -43,7 +43,7 @@ window.WEBTOON_DATA = [
     author: "5학년 변○린",
     genre: "판타지",
     coverUrl: "images/toon_03/cover.png",
-    cuts: "images/toon_03/01.png, images/toon_03/02.png"
+    cuts: "images/toon_03/01.png, images/toon_03/02.png,  images/toon_03/03.png,  images/toon_03/04.png,  images/toon_03/05.png"
   },
   {
     id: "toon_05",
@@ -51,7 +51,7 @@ window.WEBTOON_DATA = [
     author: "5학년 정○서",
     genre: "일상/개그",
     coverUrl: "images/toon_05/cover.png",
-    cuts: "images/toon_05/01.png, images/toon_05/02.png, images/toon_05/03.png"
+    cuts: "images/toon_05/01.png, images/toon_05/02.png, images/toon_05/03.png, images/toon_05/04.png"
   },
   {
     id: "toon_07",
