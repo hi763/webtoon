@@ -33,9 +33,9 @@ window.WEBTOON_DATA = [
     id: "toon_02",
     title: "마법사의 삶을 살고 있습니다",
     author: "5학년 김○온",
-    genre: "학원물",
+    genre: "판타지",
     coverUrl: "images/toon_02/cover.png",
-    cuts: "images/toon_02/01.png, images/toon_02/02.png"
+    cuts: "images/toon_02/01.jpg, images/toon_02/02.jpg"
   },
   {
     id: "toon_03",
@@ -43,7 +43,7 @@ window.WEBTOON_DATA = [
     author: "5학년 변○린",
     genre: "판타지",
     coverUrl: "images/toon_03/cover.png",
-    cuts: "images/toon_03/01.png, images/toon_03/02.png,  images/toon_03/03.png,  images/toon_03/04.png,  images/toon_03/05.png"
+    cuts: "images/toon_03/01.jpg, images/toon_03/02.jpg,  images/toon_03/03.jpg,  images/toon_03/04.jpg,  images/toon_03/05.jpg"
   },
   {
     id: "toon_05",
@@ -51,7 +51,7 @@ window.WEBTOON_DATA = [
     author: "5학년 정○서",
     genre: "일상/개그",
     coverUrl: "images/toon_05/cover.png",
-    cuts: "images/toon_05/01.png, images/toon_05/02.png, images/toon_05/03.png, images/toon_05/04.png"
+    cuts: "images/toon_05/01.jpg, images/toon_05/02.jpg, images/toon_05/03.jpg, images/toon_05/04.jpg"
   },
   {
     id: "toon_07",
@@ -59,7 +59,7 @@ window.WEBTOON_DATA = [
     author: "1학년 이○호",
     genre: "판타지",
     coverUrl: "images/toon_07/cover.png",
-    cuts: "images/toon_07/01.png, images/toon_07/02.png, images/toon_07/03.png, images/toon_07/04.png"
+    cuts: "images/toon_07/01.jpg, images/toon_07/02.jpg, images/toon_07/03.jpg, images/toon_07/04.jpg"
   },
   {
     id: "toon_08",
@@ -67,6 +67,6 @@ window.WEBTOON_DATA = [
     author: "2학년 이○연",
     genre: "판타지",
     coverUrl: "images/toon_08/cover.png",
-    cuts: "images/toon_08/01.png, images/toon_08/02.png, images/toon_08/03.png, images/toon_08/04.png, images/toon_08/05.png"
+    cuts: "images/toon_08/01.jpg, images/toon_08/02.jpg, images/toon_08/03.jpg, images/toon_08/04.jpg, images/toon_08/05.jpg"
   }
  ];
