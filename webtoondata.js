@@ -67,6 +67,6 @@ window.WEBTOON_DATA = [
     author: "2학년 이○연",
     genre: "판타지",
     coverUrl: "images/toon_08/cover.png",
-    cuts: "images/toon_08/01.jpg, images/toon_08/02.jpg, images/toon_08/03.jpg, images/toon_08/04.jpg, images/toon_08/05.jpg"
+    cuts: "images/toon_08/01.jpg, images/toon_08/02.jpg, images/toon_08/03.jpg, images/toon_08/04.jpg"
   }
  ];
