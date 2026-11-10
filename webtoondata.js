@@ -35,7 +35,7 @@ window.WEBTOON_DATA = [
     author: "5학년 김○온",
     genre: "판타지",
     coverUrl: "images/toon_02/cover.png",
-    cuts: "images/toon_02/01.jpg, images/toon_02/02.jpg"
+    cuts: "images/toon_02/01.jpg, images/toon_02/02.jpg, images/toon_02/03.jpg, images/toon_02/04.jpg, images/toon_02/05.jpg, images/toon_02/06.jpg, images/toon_02/07.jpg, images/toon_02/08.jpg, images/toon_02/09.jpg, images/toon_02/10.jpg"
   },
   {
     id: "toon_03",
